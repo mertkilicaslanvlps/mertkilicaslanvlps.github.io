@@ -195,53 +195,54 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            $(".veriFormu").submit(function(event) {
-                event.preventDefault();
-                var tedaviAdi = $("input[name=tedaviAdi]").val();
-                var fiyat = $("input[name=fiyat]").val();
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var content = atob(response.content);
+                    var existingData = JSON.parse(content);
 
-                var veriler = {
-                    tedaviAdi: tedaviAdi,
-                    fiyat: fiyat
-                };
+                    $(".veriFormu").submit(function(event) {
+                        event.preventDefault();
+                        var tedaviAdi = $("input[name=tedaviAdi]").val();
+                        var fiyat = $("input[name=fiyat]").val();
 
-                $.ajax({
-                    url: "https://api.github.com/repos/mertkilicaslanvlps/mertkilicaslanvlps.github.io/contents/veriler.json",
-                    type: "GET",
-                    dataType: "json",
-                    headers: {
-                        Authorization: "Bearer " + process.env.ACCESS_TOKEN
-                    },
-                    success: function(response) {
-                        var content = atob(response.content);
-                        var existingData = JSON.parse(content);
+                        var veriler = {
+                            tedaviAdi: tedaviAdi,
+                            fiyat: fiyat
+                        };
+
                         existingData.push(veriler);
 
-                        $.ajax({
-                            url: "https://api.github.com/repos/mertkilicaslanvlps/mertkilicaslanvlps.github.io/contents/veriler.json",
-                            type: "PUT",
-                            dataType: "json",
-                            headers: {
-                                Authorization: "Bearer " + process.env.ACCESS_TOKEN
-                            },
-                            data: JSON.stringify({
-                                message: "Veri güncellendi",
-                                content: btoa(JSON.stringify(existingData)),
-                                sha: response.sha
-                            }),
-                            success: function(response) {
-                                console.log("Veri kaydedildi.");
-                            },
-                            error: function(error) {
-                                console.log("Veri kaydedilirken hata oluştu.");
+                        var putXHR = new XMLHttpRequest();
+                        putXHR.onreadystatechange = function() {
+                            if (putXHR.readyState === 4) {
+                                if (putXHR.status === 200 || putXHR.status === 201) {
+                                    console.log("Veri kaydedildi.");
+                                } else {
+                                    console.log("Veri kaydedilirken hata oluştu.");
+                                }
                             }
-                        });
-                    },
-                    error: function(error) {
-                        console.log("Dosya bulunamadı veya erişim yetkiniz yok.");
-                    }
-                });
-            });
+                        };
+
+                        putXHR.open("PUT", "https://api.github.com/repos/mertkilicaslanvlps/mertkilicaslanvlps.github.io/contents/veriler.json");
+                        putXHR.setRequestHeader("Content-Type", "application/json");
+                        putXHR.setRequestHeader("Authorization", "Bearer " + process.env.ACCESS_TOKEN);
+                        putXHR.send(JSON.stringify({
+                            message: "Veri güncellendi",
+                            content: btoa(JSON.stringify(existingData)),
+                            sha: response.sha
+                        }));
+                    });
+                } else if (xhr.readyState === 4 && xhr.status !== 200) {
+                    console.log("Dosya bulunamadı veya erişim yetkiniz yok.");
+                }
+            };
+
+            xhr.open("GET", "https://api.github.com/repos/mertkilicaslanvlps/mertkilicaslanvlps.github.io/contents/veriler.json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.setRequestHeader("Authorization", "Bearer " + process.env.ACCESS_TOKEN);
+            xhr.send();
         });
     </script>
 </body>
