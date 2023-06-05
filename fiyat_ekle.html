@@ -227,7 +227,7 @@
 
                         putXHR.open("PUT", "https://api.github.com/repos/mertkilicaslanvlps/mertkilicaslanvlps.github.io/contents/veriler.json");
                         putXHR.setRequestHeader("Content-Type", "application/json");
-                        putXHR.setRequestHeader("Authorization", "Bearer " + process.env.ACCESS_TOKEN);
+                        putXHR.setRequestHeader("Authorization", "Bearer " + ${{ secrets.ACCESS_TOKEN }};
                         putXHR.send(JSON.stringify({
                             message: "Veri güncellendi",
                             content: btoa(JSON.stringify(existingData)),
@@ -241,7 +241,7 @@
 
             xhr.open("GET", "https://api.github.com/repos/mertkilicaslanvlps/mertkilicaslanvlps.github.io/contents/veriler.json");
             xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.setRequestHeader("Authorization", "Bearer " + process.env.ACCESS_TOKEN);
+            xhr.setRequestHeader("Authorization", "Bearer " + ${{ secrets.ACCESS_TOKEN }};
             xhr.send();
         });
     </script>
