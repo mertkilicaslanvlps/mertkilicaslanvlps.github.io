@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fiyatları Göster</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300);
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            color: white;
+            font-weight: 300;
+            margin: 0;
+        }
+        .wrapper {
+            background: #50a3a2;
+            background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+            background: -moz-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+            background: -o-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+            background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px;
+            padding: 80px 0;
+            text-align: center;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+        }
+        .button-container button {
+            appearance: none;
+            outline: 0;
+            background-color: white;
+            border: 0;
+            padding: 10px 15px;
+            color: #53e3a6;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 18px;
+            transition-duration: 0.25s;
+        }
+        .button-container button:hover {
+            background-color: rgb(245, 247, 249);
+        }
+        .data-row {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <div id="data-container">
+                <!-- Veriler burada dinamik olarak oluşturulacak -->
+            </div>
+            <div class="button-container">
+                <button id="show-button">Fiyatları Göster</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            measurementId: "YOUR_MEASUREMENT_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        $(document).ready(function() {
+            $("#show-button").click(function() {
+                var database = firebase.database();
+                var ref = database.ref("veriler");
+                ref.once("value", function(snapshot) {
+                    var dataContainer = $("#data-container");
+                    dataContainer.empty();
+                    snapshot.forEach(function(childSnapshot) {
+                        var childData = childSnapshot.val();
+                        var row = $("<div>").addClass("data-row");
+                        row.append("<p>Tedavi Adı: " + childData.tedaviAdi + "</p>");
+                        row.append("<p>Fiyatı: " + childData.fiyat + "</p>");
+                        dataContainer.append(row);
+                    });
+                }, function(error) {
+                    console.log("Veriler alınırken hata oluştu.");
+                });
+            });
+        });
+    </script>
+</body>
+</html>
