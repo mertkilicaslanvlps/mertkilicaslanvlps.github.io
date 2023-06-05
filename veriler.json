@@ -1,0 +1,14 @@
+[
+  {
+    "tedaviAdi": "Tedavi 1",
+    "fiyat": "100"
+  },
+  {
+    "tedaviAdi": "Tedavi 2",
+    "fiyat": "200"
+  },
+  {
+    "tedaviAdi": "Tedavi 3",
+    "fiyat": "300"
+  },
+]
