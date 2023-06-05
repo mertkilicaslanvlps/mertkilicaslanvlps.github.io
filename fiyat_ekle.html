@@ -206,11 +206,11 @@
                 };
 
                 $.ajax({
-                    url: "https://api.github.com/repos/mertkilicaslanvlps/mertkilicaslanvlps.github.io/contents/veriler.json",  // GitHub hesabınızın kullanıcı adı ve depo adını buraya ekleyin
+                    url: "https://api.github.com/repos/mertkilicaslanvlps/mertkilicaslanvlps.github.io/contents/veriler.json",
                     type: "GET",
                     dataType: "json",
                     headers: {
-                        Authorization: "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"  // Kişisel erişim anahtarınızı buraya ekleyin
+                        Authorization: "Bearer " + process.env.ACCESS_TOKEN
                     },
                     success: function(response) {
                         var content = atob(response.content);
@@ -218,11 +218,11 @@
                         existingData.push(veriler);
 
                         $.ajax({
-                            url: "https://api.github.com/repos/mertkilicaslanvlps/mertkilicaslanvlps.github.io/contents/veriler.json",  // GitHub hesabınızın kullanıcı adı ve depo adını buraya ekleyin
+                            url: "https://api.github.com/repos/mertkilicaslanvlps/mertkilicaslanvlps.github.io/contents/veriler.json",
                             type: "PUT",
                             dataType: "json",
                             headers: {
-                                Authorization: "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"  // Kişisel erişim anahtarınızı buraya ekleyin
+                                Authorization: "Bearer " + process.env.ACCESS_TOKEN
                             },
                             data: JSON.stringify({
                                 message: "Veri güncellendi",
