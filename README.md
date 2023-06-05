@@ -1,2 +1,0 @@
-# mertkilicaslanvlps.github.io
-data
